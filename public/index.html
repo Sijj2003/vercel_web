@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Místico</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container" id="loginForm">
+            <div class="logo">🔮 Portal Místico</div>
+            <h1>Accede al Conocimiento Arcano</h1>
+            <form id="login">
+                <div class="input-group">
+                    <input type="email" id="email" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" required>
+                    <label>Contraseña</label>
+                </div>
+                <button type="submit" class="btn">Iniciar Sesión</button>
+            </form>
+            <p class="switch">¿Nuevo en el camino místico? <a href="#" id="showRegister">Únete</a></p>
+        </div>
+
+        <div class="form-container hidden" id="registerForm">
+            <div class="logo">🌟 Portal Místico</div>
+            <h1>Inicia Tu Viaje Espiritual</h1>
+            <form id="register">
+                <div class="input-group">
+                    <input type="text" id="nombre" required>
+                    <label>Nombre Místico</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="regEmail" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="regPassword" required>
+                    <label>Contraseña Secreta</label>
+                </div>
+                <button type="submit" class="btn">Unirse al Círculo</button>
+            </form>
+            <p class="switch">¿Ya eres iniciado? <a href="#" id="showLogin">Inicia Sesión</a></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Servicio - Portal Místico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8a2be2;
+            --secondary-color: #4b0082;
+            --accent-color: #9d4edd;
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --bg-dark: #0a0a0a;
+            --bg-medium: #1a1a2e;
+            --bg-light: #16213e;
+            --card-bg: rgba(26, 26, 46, 0.6);
+            --border-color: rgba(138, 43, 226, 0.2);
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --love-color: #e91e63;
+            --finance-color: #4caf50;
+            --cleaning-color: #00bcd4;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 50%, var(--bg-light) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .services-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+        /* Header */
+        .services-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.6));
+        }
+        .logo-text {
+            font-size: clamp(0.9rem, 2vw, 1.3rem);
+            font-weight: 500;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-light);
+            font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.4rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .back-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        /* Main Content */
+        .services-main {
+            flex: 1;
+            padding: clamp(1rem, 3vw, 2rem);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .services-title {
+            text-align: center;
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+        }
+        .services-title h1 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .services-title p {
+            color: var(--text-muted);
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+        }
+        /* Service Categories */
+        .categories-container {
+            display: flex;
+            justify-content: center;
+            gap: clamp(0.5rem, 2vw, 0.8rem);
+            margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+            flex-wrap: wrap;
+        }
+        .category-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-muted);
+            font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.4rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+        .category-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        .category-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--text-light);
+        }
+        /* Services Grid - Responsive */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+            gap: clamp(1rem, 3vw, 1.5rem);
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+            width: 100%;
+        }
+        .service-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.15);
+            border-color: var(--primary-color);
+        }
+        .service-card.selected {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: clamp(0.8rem, 2vw, 1rem);
+        }
+        .service-icon {
+            width: clamp(35px, 8vw, 40px);
+            height: clamp(35px, 8vw, 40px);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: white;
+        }
+        .service-icon.consulta {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+        .service-icon.limpieza {
+            background: linear-gradient(45deg, var(--cleaning-color), #0097a7);
+        }
+        .service-icon.amor {
+            background: linear-gradient(45deg, var(--love-color), #c2185b);
+        }
+        .service-icon.finanzas {
+            background: linear-gradient(45deg, var(--finance-color), #2e7d32);
+        }
+        .service-price {
+            background: linear-gradient(45deg, var(--warning-color), #ff9800);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+            white-space: nowrap;
+        }
+        .service-title {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: clamp(0.6rem, 2vw, 0.8rem);
+        }
+        .service-description {
+            color: var(--text-muted);
+            font-size: clamp(0.8rem, 2vw, 0.85rem);
+            line-height: 1.4;
+            margin-bottom: clamp(0.8rem, 2vw, 1rem);
+            flex-grow: 1;
+        }
+        .service-features {
+            list-style: none;
+            margin-bottom: clamp(0.8rem, 2vw, 1.2rem);
+        }
+        .service-features li {
+            padding: 0.3rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: clamp(0.75rem, 2vw, 0.8rem);
+        }
+        .service-features li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+        .service-select-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            color: var(--text-light);
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+        .service-select-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        .service-select-btn.selected {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        /* Request Form */
+        .request-form {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: clamp(1.5rem, 4vw, 2rem);
+            border: 1px solid var(--border-color);
+            margin-top: clamp(1.5rem, 4vw, 2rem);
+            display: none;
+            animation: fadeIn 0.5s ease;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .request-form.active {
+            display: block;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+        }
+        .form-header h2 {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+        .form-header p {
+            color: var(--text-muted);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(0.8rem, 2vw, 1rem);
+        }
+        .form-group {
+            margin-bottom: clamp(0.8rem, 2vw, 1rem);
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: var(--text-light);
+            font-weight: 400;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: clamp(0.5rem, 2vw, 0.6rem) clamp(0.6rem, 2vw, 0.8rem);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: clamp(60px, 15vw, 80px);
+        }
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: clamp(0.8rem, 2vw, 1rem);
+            margin-top: clamp(1rem, 3vw, 1rem);
+        }
+        .btn-submit,
+        .btn-cancel {
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: clamp(0.5rem, 2vw, 0.6rem) clamp(1rem, 3vw, 1.5rem);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 25px;
+            white-space: nowrap;
+        }
+        .btn-submit {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+        }
+        .btn-submit:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+        .btn-cancel:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .services-header {
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .services-main {
+                padding: 1rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .request-form {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .btn-submit,
+            .btn-cancel {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .service-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card:nth-child(6) { animation-delay: 0.6s; }
+        .service-card:nth-child(7) { animation-delay: 0.7s; }
+        /* Scroll improvements */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .notification.success {
+            background: var(--success-color);
+        }
+        .notification.error {
+            background: var(--danger-color);
+        }
+        .notification.warning {
+            background: var(--warning-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="services-wrapper">
+        <!-- Header -->
+        <header class="services-header">
+            <div class="logo-section">
+                <div class="logo">🔮</div>
+                <div class="logo-text">Portal Místico</div>
+            </div>
+            <div class="header-actions">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver
+                </button>
+            </div>
+        </header>
+        <!-- Main Content -->
+        <main class="services-main">
+            <div class="services-title">
+                <h1>Solicitar Servicio</h1>
+                <p>Elige el servicio que mejor se adapte a tus necesidades</p>
+            </div>
+            <!-- Service Categories -->
+            <div class="categories-container">
+                <button class="category-btn active" onclick="filterServices('todos')">
+                    <i class="fas fa-th"></i> Todos
+                </button>
+                <button class="category-btn" onclick="filterServices('consulta')">
+                    <i class="fas fa-search"></i> Consultas
+                </button>
+                <button class="category-btn" onclick="filterServices('limpieza')">
+                    <i class="fas fa-wind"></i> Limpiezas
+                </button>
+                <button class="category-btn" onclick="filterServices('amor')">
+                    <i class="fas fa-heart"></i> Amor
+                </button>
+                <button class="category-btn" onclick="filterServices('finanzas')">
+                    <i class="fas fa-coins"></i> Finanzas
+                </button>
+            </div>
+            <!-- Services Grid -->
+            <div class="services-grid" id="servicesGrid">
+                <!-- Consulta Sencilla -->
+                <div class="service-card" data-category="consulta" onclick="selectService('consulta-sencilla', 15)">
+                    <div class="service-header">
+                        <div class="service-icon consulta">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="service-price">$15</div>
+                    </div>
+                    <h3 class="service-title">Consulta Sencilla</h3>
+                    <p class="service-description">Consulta breve para temas puntuales con información concisa y directa.</p>
+                    <ul class="service-features">
+                        <li>30 minutos</li>
+                        <li>Un tema específico</li>
+                        <li>Respuestas directas</li>
+                    </ul>
+                    <button class="service-select-btn">
+                        <i class="fas fa-check"></i> Seleccionar
+                    </button>
+                </div>
+                <!-- Consulta Profunda -->
+                <div class="service-card" data-category="consulta" onclick="selectService('consulta-profunda', 20)">
+                    <div class="service-header">
+                        <div class="service-icon consulta">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div class="service-price">$20</div>
+                    </div>
+                    <h3 class="service-title">Consulta Profunda</h3>
+                    <p class="service-description">Análisis exhaustivo explorando múltiples aspectos y dimensiones.</p>
+                    <ul class="service-features">
+                        <li>50 minutos</li>
+                        <li>Análisis multidimensional</li>
+                        <li>Recomendaciones detalladas</li>
+                    </ul>
+                    <button class="service-select-btn">
+                        <i class="fas fa-check"></i> Seleccionar
+                    </button>
+                </div>
+                <!-- Consulta Profunda + Limpieza Sencilla -->
+                <div class="service-card" data-category="consulta" onclick="selectService('consulta-limpieza', 30)">
+                    <div class="service-header">
+                        <div class="service-icon consulta">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div class="service-price">$30</div>
+                    </div>
+                    <h3 class="service-title">Consulta + Limpieza</h3>
+                    <p class="service-description">Análisis profundo con limpieza energética para prevenir o eliminar energías bajas.</p>
+                    <ul class="service-features">
+                        <li>75 minutos</li>
+                        <li>Consulta profunda 60 min</li>
+                        <li>Limpieza energética 30 min</li>
+                    </ul>
+                    <button class="service-select-btn">
+                        <i class="fas fa-check"></i> Seleccionar
+                    </button>
+                </div>
+                <!-- Limpieza Sencilla -->
+                <div class="service-card" data-category="limpieza" onclick="selectService('limpieza-sencilla', 15)">
+                    <div class="service-header">
+                        <div class="service-icon limpieza">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="service-price">$15</div>
+                    </div>
+                    <h3 class="service-title">Limpieza Sencilla</h3>
+                    <p class="service-description">Limpieza de aura y energía para prevenir o expulsar energías bajas.</p>
+                    <ul class="service-features">
+                        <li>30 minutos</li>
+                        <li>Limpieza de aura</li>
+                        <li>Alivio inmediato</li>
+                    </ul>
+                    <button class="service-select-btn">
+                        <i class="fas fa-check"></i> Seleccionar
+                    </button>
+                </div>
+                <!-- Consultas de Amor -->
+                <div class="service-card" data-category="amor" onclick="selectService('consultas-amor', 20)">
+                    <div class="service-header">
+                        <div class="service-icon amor">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="service-price">$20</div>
+                    </div>
+                    <h3 class="service-title">Consultas de Amor</h3>
+                    <p class="service-description">Análisis de conexiones y guía para trabajos esotéricos de amor.</p>
+                    <ul class="service-features">
+                        <li>45 minutos</li>
+                        <li>Compatibilidad</li>
+                        <li>Guía para trabajos</li>
+                    </ul>
+                    <button class="service-select-btn">
+                        <i class="fas fa-check"></i> Seleccionar
+                    </button>
+                </div>
+                <!-- Consultas de Finanzas -->
+                <div class="service-card" data-category="finanzas" onclick="selectService('consultas-finanzas', 20)">
+                    <div class="service-header">
+                        <div class="service-icon finanzas">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="service-price">$20</div>
+                    </div>
+                    <h3 class="service-title">Consultas de Finanzas</h3>
+                    <p class="service-description">Estrategias para atraer abundancia y mejorar tu situación financiera.</p>
+                    <ul class="service-features">
+                        <li>45 minutos</li>
+                        <li>Bloques financieros</li>
+                        <li>Activación de abundancia</li>
+                    </ul>
+                    <button class="service-select-btn">
+                        <i class="fas fa-check"></i> Seleccionar
+                    </button>
+                </div>
+                <!-- Otras Consultas -->
+                <div class="service-card" data-category="consulta" onclick="selectService('otras-consultas', 15)">
+                    <div class="service-header">
+                        <div class="service-icon consulta">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="service-price">$15</div>
+                    </div>
+                    <h3 class="service-title">Otras Consultas</h3>
+                    <p class="service-description">Temas personalizados adaptados a tus necesidades específicas.</p>
+                    <ul class="service-features">
+                        <li>Según necesidad</li>
+                        <li>Temas personalizados</li>
+                        <li>Flexibilidad</li>
+                    </ul>
+                    <button class="service-select-btn">
+                        <i class="fas fa-check"></i> Seleccionar
+                    </button>
+                </div>
+            </div>
+            <!-- Request Form -->
+            <div class="request-form" id="requestForm">
+                <div class="form-header">
+                    <h2>Solicitar <span id="selectedServiceName">Servicio</span></h2>
+                    <p>Completa el formulario para programar tu servicio</p>
+                </div>
+                <form id="serviceRequestForm">
+                    <div class="form-group">
+                        <label for="detalles">Detalles de tu solicitud</label>
+                        <textarea id="detalles" placeholder="Describe lo que necesitas..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaPreferida">Fecha preferida</label>
+                        <input type="date" id="fechaPreferida" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="horaPreferida">Hora preferida</label>
+                        <select id="horaPreferida" required>
+                            <option value="">Selecciona hora</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">01:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                            <option value="17:00">05:00 PM</option>
+                            <option value="18:00">06:00 PM</option>
+                            <option value="19:00">07:00 PM</option>
+                            <option value="20:00">08:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contacto">Teléfono de contacto</label>
+                        <input type="tel" id="contacto" placeholder="+34 600 000 000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metodoComunicacion">Método de comunicación</label>
+                        <select id="metodoComunicacion" required>
+                            <option value="">Selecciona método</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="telegram">Telegram</option>
+                            <option value="llamada">Llamada</option>
+                            <option value="video">Videollamada</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="cancelSelection()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-paper-plane"></i> Enviar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Notification container -->
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        let selectedService = '';
+        let selectedPrice = 0;
+        
+        // Inicializar: mostrar todos los servicios al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            filterServices('todos');
+            // Establecer fecha mínima hoy
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaPreferida').setAttribute('min', today);
+        });
+        
+        // Filtrar servicios por categoría
+        function filterServices(category) {
+            // Actualizar botones de categoría
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(category) || 
+                    (category === 'todos' && btn.textContent.includes('Todos'))) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Mostrar/ocultar servicios
+            const serviceCards = document.querySelectorAll('.service-card');
+            
+            serviceCards.forEach(card => {
+                if (category === 'todos' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Seleccionar servicio
+        function selectService(service, price) {
+            // Deseleccionar todos los servicios
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.classList.remove('selected');
+                const btn = card.querySelector('.service-select-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i> Seleccionar';
+                btn.classList.remove('selected');
+            });
+            
+            // Seleccionar servicio actual
+            const currentCard = document.querySelector(`[onclick="selectService('${service}', ${price})"]`);
+            currentCard.classList.add('selected');
+            const selectedBtn = currentCard.querySelector('.service-select-btn');
+            selectedBtn.innerHTML = '<i class="fas fa-check-circle"></i> Seleccionado';
+            selectedBtn.classList.add('selected');
+            
+            // Guardar servicio seleccionado
+            selectedService = service;
+            selectedPrice = price;
+            
+            // Actualizar nombre del servicio en el formulario
+            const serviceNames = {
+                'consulta-sencilla': 'Consulta Sencilla',
+                'consulta-profunda': 'Consulta Profunda',
+                'consulta-limpieza': 'Consulta Profunda + Limpieza',
+                'limpieza-sencilla': 'Limpieza Sencilla',
+                'consultas-amor': 'Consultas de Amor',
+                'consultas-finanzas': 'Consultas de Finanzas',
+                'otras-consultas': 'Otras Consultas'
+            };
+            document.getElementById('selectedServiceName').textContent = serviceNames[service];
+            
+            // Mostrar formulario
+            document.getElementById('requestForm').classList.add('active');
+            
+            // Scroll al formulario
+            document.getElementById('requestForm').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Cancelar selección
+        function cancelSelection() {
+            // Deseleccionar todos los servicios
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.classList.remove('selected');
+                const btn = card.querySelector('.service-select-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i> Seleccionar';
+                btn.classList.remove('selected');
+            });
+            
+            // Ocultar formulario
+            document.getElementById('requestForm').classList.remove('active');
+            
+            // Limpiar selección
+            selectedService = '';
+            selectedPrice = 0;
+        }
+        
+        // Mostrar notificación
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Enviar formulario
+        document.getElementById('serviceRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validación básica
+            if (!selectedService) {
+                showNotification('Por favor selecciona un servicio', 'warning');
+                return;
+            }
+            
+            const requestData = {
+                servicio: selectedService,
+                precio: selectedPrice,
+                detalles: document.getElementById('detalles').value,
+                fechaPreferida: document.getElementById('fechaPreferida').value,
+                horaPreferida: document.getElementById('horaPreferida').value,
+                contacto: document.getElementById('contacto').value,
+                metodoComunicacion: document.getElementById('metodoComunicacion').value
+            };
+            
+            try {
+                // Mostrar indicador de carga
+                const submitBtn = document.querySelector('.btn-submit');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                submitBtn.disabled = true;
+                
+                const response = await fetch('/api/services', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData),
+                    credentials: 'same-origin' // Importante para enviar cookies
+                });
+                
+                const data = await response.json();
+                
+                // Restaurar botón
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                if (response.ok) {
+                    const serviceNames = {
+                        'consulta-sencilla': 'Consulta Sencilla',
+                        'consulta-profunda': 'Consulta Profunda',
+                        'consulta-limpieza': 'Consulta Profunda + Limpieza',
+                        'limpieza-sencilla': 'Limpieza Sencilla',
+                        'consultas-amor': 'Consultas de Amor',
+                        'consultas-finanzas': 'Consultas de Finanzas',
+                        'otras-consultas': 'Otras Consultas'
+                    };
+                    
+                    showNotification(`¡Solicitud enviada! Te contactaremos para confirmar "${serviceNames[selectedService]}" por $${selectedPrice}.`, 'success');
+                    this.reset();
+                    cancelSelection();
+                    
+                    // Redirigir después de un tiempo
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 3000);
+                } else {
+                    showNotification(data.mensaje || 'Error al enviar solicitud', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error de conexión. Inténtalo de nuevo.', 'error');
+                
+                // Restaurar botón en caso de error
+                const submitBtn = document.querySelector('.btn-submit');
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar';
+                submitBtn.disabled = false;
+            }
+        });
+        
+        function goBack() {
+            window.location.href = '/dashboard';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte - Portal Místico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8a2be2;
+            --secondary-color: #4b0082;
+            --accent-color: #9d4edd;
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --bg-dark: #0a0a0a;
+            --bg-medium: #1a1a2e;
+            --bg-light: #16213e;
+            --card-bg: rgba(26, 26, 46, 0.6);
+            --border-color: rgba(138, 43, 226, 0.2);
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --love-color: #e91e63;
+            --finance-color: #4caf50;
+            --cleaning-color: #00bcd4;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 50%, var(--bg-light) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .support-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+        /* Header */
+        .support-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.6));
+        }
+        .logo-text {
+            font-size: clamp(0.9rem, 2vw, 1.3rem);
+            font-weight: 500;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-light);
+            font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.4rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .back-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        /* Main Content */
+        .support-main {
+            flex: 1;
+            padding: clamp(1rem, 3vw, 2rem);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .support-title {
+            text-align: center;
+            margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+        }
+        .support-title h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .support-title p {
+            color: var(--text-muted);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+        }
+        /* Contact Info */
+        .contact-info {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: clamp(1.5rem, 4vw, 2rem);
+            border: 1px solid var(--border-color);
+            margin-bottom: clamp(2rem, 5vw, 3rem);
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .contact-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: clamp(1rem, 3vw, 1.5rem);
+            margin-top: 1.5rem;
+        }
+        .contact-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            width: 150px;
+        }
+        .contact-method:hover {
+            background: rgba(138, 43, 226, 0.1);
+            transform: translateY(-3px);
+        }
+        .contact-method i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        .contact-method span {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        /* Support Form */
+        .support-form {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: clamp(1.5rem, 4vw, 2rem);
+            border: 1px solid var(--border-color);
+            margin-bottom: clamp(2rem, 5vw, 3rem);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: clamp(1.5rem, 4vw, 2rem);
+        }
+        .form-header h2 {
+            font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .form-header p {
+            color: var(--text-muted);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        .form-group {
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: clamp(0.5rem, 2vw, 0.7rem) clamp(0.6rem, 2vw, 0.9rem);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: clamp(100px, 20vw, 150px);
+        }
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: clamp(0.8rem, 2vw, 1.2rem);
+            margin-top: clamp(1.5rem, 4vw, 2rem);
+        }
+        .btn-submit,
+        .btn-cancel {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1.2rem, 3vw, 1.5rem);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 25px;
+            white-space: nowrap;
+        }
+        .btn-submit {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        }
+        .btn-submit:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.6);
+        }
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+        .btn-cancel:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        /* FAQ Section */
+        .faq-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: clamp(1.5rem, 4vw, 2rem);
+            border: 1px solid var(--border-color);
+            margin-bottom: clamp(2rem, 5vw, 3rem);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .faq-header {
+            text-align: center;
+            margin-bottom: clamp(1.5rem, 4vw, 2rem);
+        }
+        .faq-header h2 {
+            font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .faq-header p {
+            color: var(--text-muted);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        .faq-items {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .faq-question {
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--text-muted);
+            padding: 0 1.2rem;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 0 1.2rem 1rem 1.2rem;
+        }
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .status-message.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: var(--success-color);
+        }
+        .status-message.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: var(--danger-color);
+        }
+        .status-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .notification.success {
+            background: var(--success-color);
+        }
+        .notification.error {
+            background: var(--danger-color);
+        }
+        .notification.warning {
+            background: var(--warning-color);
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .support-header {
+                padding: 1rem;
+            }
+            .support-main {
+                padding: 1rem;
+            }
+            .contact-methods {
+                gap: 1rem;
+            }
+            .contact-method {
+                width: 120px;
+                padding: 0.8rem;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .btn-submit,
+            .btn-cancel {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="support-wrapper">
+        <!-- Header -->
+        <header class="support-header">
+            <div class="logo-section">
+                <div class="logo">🔮</div>
+                <div class="logo-text">Portal Místico</div>
+            </div>
+            <div class="header-actions">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver
+                </button>
+            </div>
+        </header>
+        <!-- Main Content -->
+        <main class="support-main">
+            <div class="support-title">
+                <h1>Soporte Espiritual</h1>
+                <p>Estamos aquí para ayudarte en tu camino místico</p>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <h3><i class="fas fa-headset"></i> Canales de Comunicación</h3>
+                <p>Nuestro equipo de expertos está disponible para atenderte en los siguientes canales:</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fas fa-phone"></i>
+                        <span>Teléfono</span>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fab fa-telegram"></i>
+                        <span>Telegram</span>
+                    </div>
+                </div>
+                
+                <div class="contact-details" style="margin-top: 1.5rem; color: var(--text-muted);">
+                    <p><i class="fas fa-envelope"></i> soporte@portalmistico.com</p>
+                    <p><i class="fab fa-whatsapp"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-clock"></i> Horario: Lunes a Viernes, 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            
+            <!-- Support Form -->
+            <div class="support-form">
+                <div class="form-header">
+                    <h2>Envíanos un Mensaje</h2>
+                    <p>Describe tu problema o consulta y te responderemos a la brevedad</p>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+                
+                <form id="supportForm">
+                    <div class="form-group">
+                        <label for="asunto">Asunto</label>
+                        <select id="asunto" required>
+                            <option value="">Selecciona un asunto</option>
+                            <option value="consulta">Consulta General</option>
+                            <option value="servicio">Problema con un Servicio</option>
+                            <option value="pago">Problema de Pago</option>
+                            <option value="cuenta">Problema con mi Cuenta</option>
+                            <option value="sugerencia">Sugerencia</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" placeholder="Describe tu problema o consulta con el mayor detalle posible..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contacto">Información de Contacto</label>
+                        <input type="text" id="contacto" placeholder="Teléfono, WhatsApp o Email (opcional)">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="goBack()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <div class="faq-header">
+                    <h2>Preguntas Frecuentes</h2>
+                    <p>Encuentra respuestas a las consultas más comunes</p>
+                </div>
+                
+                <div class="faq-items">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cómo puedo agendar una consulta?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Para agendar una consulta, ve a la sección de "Servicios" en tu dashboard, selecciona el tipo de consulta que deseas y completa el formulario con tus datos y preferencias de fecha y hora.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Métodos de pago aceptados?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Aceptamos transferencias bancarias, tarjetas de crédito/débito a través de Stripe, pagos con Binance (criptomonedas) y otros métodos de pago que puedas especificar al confirmar tu solicitud.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cómo cancelo o reprogramo una cita?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Puedes cancelar una cita desde la sección de "Mis Solicitudes" en tu dashboard. Para reprogramar, te recomendamos cancelar la cita actual y agendar una nueva.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>¿Cuánto tiempo toma recibir una respuesta?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Nuestro equipo de soporte responde todas las consultas en un plazo máximo de 24 horas durante días laborables. Para urgencias, te recomendamos contactarnos directamente por WhatsApp o teléfono.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Notification container -->
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Toggle FAQ items
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Show status message
+        function showStatusMessage(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type} show`;
+            
+            setTimeout(() => {
+                statusMessage.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Handle form submission
+        document.getElementById('supportForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const asunto = document.getElementById('asunto').value;
+            const mensaje = document.getElementById('mensaje').value;
+            const contacto = document.getElementById('contacto').value;
+            
+            // Validate form
+            if (!asunto || !mensaje) {
+                showStatusMessage('Por favor completa todos los campos requeridos', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-submit');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            submitBtn.disabled = true;
+            
+            try {
+                const supportData = {
+                    asunto,
+                    mensaje,
+                    contacto
+                };
+                
+                const response = await fetch('/api/support', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(supportData),
+                    credentials: 'same-origin' // Important for sending cookies
+                });
+                
+                const data = await response.json();
+                
+                // Restore button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                if (response.ok) {
+                    showNotification('Mensaje enviado correctamente. Te responderemos pronto.', 'success');
+                    
+                    // Reset form
+                    document.getElementById('supportForm').reset();
+                    
+                    // Redirect after a delay
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 3000);
+                } else {
+                    showStatusMessage(data.mensaje || 'Error al enviar mensaje', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatusMessage('Error de conexión. Inténtalo de nuevo.', 'error');
+                
+                // Restore button in case of error
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Go back to dashboard
+        function goBack() {
+            window.location.href = '/dashboard';
+        }
+    </script>
+</body>
+</html>

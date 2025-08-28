@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Solicitudes - Portal Místico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8a2be2;
+            --secondary-color: #4b0082;
+            --accent-color: #9d4edd;
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --bg-dark: #0a0a0a;
+            --bg-medium: #1a1a2e;
+            --bg-light: #16213e;
+            --card-bg: rgba(26, 26, 46, 0.6);
+            --border-color: rgba(138, 43, 226, 0.2);
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --love-color: #e91e63;
+            --finance-color: #4caf50;
+            --cleaning-color: #00bcd4;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 50%, var(--bg-light) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .requests-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(1rem, 3vw, 2rem);
+        }
+        .requests-header {
+            text-align: center;
+            margin-bottom: clamp(2rem, 5vw, 3rem);
+        }
+        .requests-header h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .requests-header p {
+            color: var(--text-muted);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+        }
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-light);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: clamp(1.5rem, 4vw, 2rem);
+        }
+        .back-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        .requests-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: clamp(2rem, 5vw, 3rem);
+            flex-wrap: wrap;
+            gap: clamp(0.5rem, 2vw, 1rem);
+        }
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-muted);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tab-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        .tab-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--text-light);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .request-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            padding: clamp(1.2rem, 3vw, 1.8rem);
+            border: 1px solid var(--border-color);
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .request-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .request-card:hover::before {
+            opacity: 1;
+        }
+        .request-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.15);
+            border-color: var(--primary-color);
+        }
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .request-title {
+            color: var(--primary-color);
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .request-price {
+            background: linear-gradient(45deg, var(--warning-color), #ff9800);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+        }
+        .request-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-pendiente {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+        .status-procesando {
+            background: rgba(23, 162, 184, 0.2);
+            color: #17a2b8;
+            border: 1px solid rgba(23, 162, 184, 0.3);
+        }
+        .status-completado {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        .status-cancelado {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+        .status-abierto {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+        .status-cerrado {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        .request-details {
+            color: var(--text-muted);
+            margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+            line-height: 1.6;
+        }
+        .request-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .request-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .request-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: clamp(0.5rem, 2vw, 1rem);
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            color: var(--text-light);
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.4rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        .action-btn.confirm {
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+        .action-btn.confirm:hover {
+            background: rgba(40, 167, 69, 0.1);
+        }
+        .action-btn.delete {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+        .action-btn.delete:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+        .empty-state {
+            text-align: center;
+            padding: clamp(3rem, 8vw, 5rem);
+            color: var(--text-muted);
+        }
+        .empty-state i {
+            font-size: clamp(3rem, 8vw, 4rem);
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+        .empty-state h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+        }
+        .empty-state p {
+            margin-bottom: 1.5rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        .empty-state a {
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .empty-state a:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 500px;
+            padding: clamp(1.5rem, 4vw, 2rem);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .modal-title {
+            color: var(--primary-color);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-weight: 500;
+        }
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .modal-close:hover {
+            color: var(--danger-color);
+        }
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .payment-method {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .payment-method:hover {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
+        }
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.2);
+        }
+        .payment-method i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        .payment-method-details {
+            flex: 1;
+        }
+        .payment-method-title {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+        .payment-method-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .other-payment-method {
+            display: none;
+            margin-top: 1rem;
+        }
+        .other-payment-method.active {
+            display: block;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .modal-btn {
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.6rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 25px;
+            white-space: nowrap;
+        }
+        .modal-btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+        .modal-btn-cancel:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        .modal-btn-confirm {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+        }
+        .modal-btn-confirm:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .notification.success {
+            background: var(--success-color);
+        }
+        .notification.error {
+            background: var(--danger-color);
+        }
+        .notification.warning {
+            background: var(--warning-color);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .requests-container {
+                padding: 1rem;
+            }
+            .request-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .request-actions {
+                justify-content: center;
+            }
+            .modal-actions {
+                flex-direction: column;
+            }
+            .modal-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="requests-container">
+        <div class="requests-header">
+            <h1>Mis Solicitudes</h1>
+            <p>Revisa el estado de tus solicitudes y servicios</p>
+        </div>
+        
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Volver al Dashboard
+        </button>
+        
+        <div class="requests-tabs">
+            <button class="tab-btn active" onclick="showTab('servicios')">
+                <i class="fas fa-concierge-bell"></i> Servicios
+            </button>
+            <button class="tab-btn" onclick="showTab('soporte')">
+                <i class="fas fa-headset"></i> Soporte
+            </button>
+        </div>
+        
+        <div id="servicios-tab" class="tab-content active">
+            <div id="services-list">
+                <!-- Las solicitudes de servicio se cargarán aquí -->
+            </div>
+        </div>
+        
+        <div id="soporte-tab" class="tab-content">
+            <div id="support-list">
+                <!-- Los tickets de soporte se cargarán aquí -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmación de pago -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirmar Solicitud</h2>
+                <button class="modal-close" onclick="closePaymentModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Selecciona un método de pago para confirmar tu solicitud:</p>
+                <div class="payment-methods">
+                    <div class="payment-method" data-method="transferencia" onclick="selectPaymentMethod('transferencia')">
+                        <i class="fas fa-university"></i>
+                        <div class="payment-method-details">
+                            <div class="payment-method-title">Transferencia Nacional</div>
+                            <div class="payment-method-description">Transferencia bancaria directa</div>
+                        </div>
+                    </div>
+                    <div class="payment-method" data-method="stripe" onclick="selectPaymentMethod('stripe')">
+                        <i class="fas fa-credit-card"></i>
+                        <div class="payment-method-details">
+                            <div class="payment-method-title">Tarjeta de Crédito/Débito</div>
+                            <div class="payment-method-description">Pago seguro con Stripe</div>
+                        </div>
+                    </div>
+                    <div class="payment-method" data-method="binance" onclick="selectPaymentMethod('binance')">
+                        <i class="fab fa-bitcoin"></i>
+                        <div class="payment-method-details">
+                            <div class="payment-method-title">Binance</div>
+                            <div class="payment-method-description">Criptomonedas</div>
+                        </div>
+                    </div>
+                    <div class="payment-method" data-method="otro" onclick="selectPaymentMethod('otro')">
+                        <i class="fas fa-wallet"></i>
+                        <div class="payment-method-details">
+                            <div class="payment-method-title">Otro</div>
+                            <div class="payment-method-description">Especificar método de pago</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="otherPaymentMethod" class="other-payment-method">
+                    <div class="form-group">
+                        <label for="otherPaymentDetails">Especifica el método de pago:</label>
+                        <input type="text" id="otherPaymentDetails" placeholder="Describe tu método de pago">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-cancel" onclick="closePaymentModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button class="modal-btn modal-btn-confirm" onclick="confirmPayment()">
+                        <i class="fas fa-check"></i> Confirmar Pago
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification container -->
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        let currentServiceId = null;
+        let selectedPaymentMethod = null;
+        
+        // Cargar solicitudes de servicio
+        async function loadServices() {
+            try {
+                const response = await fetch('/api/services', {
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    const services = await response.json();
+                    const servicesList = document.getElementById('services-list');
+                    
+                    if (services.length === 0) {
+                        servicesList.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list"></i>
+                                <h3>No tienes solicitudes de servicio</h3>
+                                <p>¡Solicita tu primer servicio espiritual!</p>
+                                <a href="/services">
+                                    <i class="fas fa-plus"></i> Solicitar Servicio
+                                </a>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    servicesList.innerHTML = services.map(service => {
+                        const serviceNames = {
+                            'consulta-sencilla': 'Consulta Sencilla',
+                            'consulta-profunda': 'Consulta Profunda',
+                            'consulta-limpieza': 'Consulta Profunda + Limpieza',
+                            'limpieza-sencilla': 'Limpieza Sencilla',
+                            'consultas-amor': 'Consultas de Amor',
+                            'consultas-finanzas': 'Consultas de Finanzas',
+                            'otras-consultas': 'Otras Consultas'
+                        };
+                        
+                        const statusClass = `status-${service.estado.toLowerCase()}`;
+                        
+                        // Determinar qué botones mostrar según el estado
+                        let actionButtons = '';
+                        if (service.estado === 'Pendiente') {
+                            actionButtons = `
+                                <button class="action-btn confirm" onclick="openPaymentModal('${service._id}')">
+                                    <i class="fas fa-check"></i> Confirmar
+                                </button>
+                                <button class="action-btn delete" onclick="deleteService('${service._id}')">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            `;
+                        } else if (service.estado === 'Procesando') {
+                            actionButtons = `
+                                <button class="action-btn delete" onclick="deleteService('${service._id}')">
+                                    <i class="fas fa-trash"></i> Cancelar
+                                </button>
+                            `;
+                        }
+                        
+                        return `
+                            <div class="request-card">
+                                <div class="request-header">
+                                    <div class="request-title">
+                                        <i class="fas fa-star"></i> ${serviceNames[service.servicio]}
+                                    </div>
+                                    <div class="request-price">$${service.precio}</div>
+                                </div>
+                                <div class="request-status ${statusClass}">${service.estado}</div>
+                                <div class="request-details">${service.detalles}</div>
+                                <div class="request-meta">
+                                    <span><i class="fas fa-calendar"></i> ${new Date(service.fechaPreferida).toLocaleDateString()}</span>
+                                    <span><i class="fas fa-clock"></i> ${service.horaPreferida}</span>
+                                    <span><i class="fas fa-phone"></i> ${service.contacto}</span>
+                                    <span><i class="fas fa-comment"></i> ${service.metodoComunicacion}</span>
+                                </div>
+                                <div class="request-actions">
+                                    ${actionButtons}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error al cargar las solicitudes', 'error');
+                window.location.href = '/';
+            }
+        }
+
+        // Cargar tickets de soporte
+        async function loadSupport() {
+            try {
+                const response = await fetch('/api/support', {
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    const tickets = await response.json();
+                    const supportList = document.getElementById('support-list');
+                    
+                    if (tickets.length === 0) {
+                        supportList.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-headset"></i>
+                                <h3>No tienes tickets de soporte</h3>
+                                <p>¿Necesitas ayuda? Crea un ticket de soporte.</p>
+                                <a href="/support">
+                                    <i class="fas fa-plus"></i> Crear Ticket
+                                </a>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    supportList.innerHTML = tickets.map(ticket => {
+                        const statusClass = `status-${ticket.estado.toLowerCase()}`;
+                        
+                        return `
+                            <div class="request-card">
+                                <div class="request-header">
+                                    <div class="request-title">
+                                        <i class="fas fa-ticket-alt"></i> ${ticket.asunto}
+                                    </div>
+                                    <div class="request-status ${statusClass}">${ticket.estado}</div>
+                                </div>
+                                <div class="request-details">${ticket.mensaje}</div>
+                                ${ticket.respuesta ? `
+                                    <div class="request-details">
+                                        <strong><i class="fas fa-reply"></i> Respuesta:</strong> ${ticket.respuesta}
+                                    </div>
+                                ` : ''}
+                                <div class="request-meta">
+                                    <span><i class="fas fa-calendar"></i> Creado: ${new Date(ticket.fechaCreacion).toLocaleDateString()}</span>
+                                    ${ticket.contacto ? `<span><i class="fas fa-phone"></i> ${ticket.contacto}</span>` : ''}
+                                    ${ticket.fechaRespuesta ? `
+                                        <span><i class="fas fa-check"></i> Respondido: ${new Date(ticket.fechaRespuesta).toLocaleDateString()}</span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error al cargar los tickets de soporte', 'error');
+                window.location.href = '/';
+            }
+        }
+
+        // Cambiar entre pestañas
+        function showTab(tabName) {
+            // Actualizar botones
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Actualizar contenido
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            if (tabName === 'servicios') {
+                document.getElementById('servicios-tab').classList.add('active');
+                loadServices();
+            } else {
+                document.getElementById('soporte-tab').classList.add('active');
+                loadSupport();
+            }
+        }
+
+        // Volver al dashboard
+        function goBack() {
+            window.location.href = '/dashboard';
+        }
+        
+        // Eliminar servicio
+        async function deleteService(serviceId) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta solicitud?')) {
+                try {
+                    const response = await fetch(`/api/services/${serviceId}`, {
+                        method: 'DELETE',
+                        credentials: 'same-origin'
+                    });
+                    
+                    if (response.ok) {
+                        showNotification('Solicitud eliminada correctamente', 'success');
+                        loadServices();
+                    } else {
+                        const error = await response.json();
+                        showNotification(error.mensaje || 'Error al eliminar la solicitud', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showNotification('Error al eliminar la solicitud', 'error');
+                }
+            }
+        }
+        
+        // Abrir modal de pago
+        function openPaymentModal(serviceId) {
+            currentServiceId = serviceId;
+            selectedPaymentMethod = null;
+            document.getElementById('paymentModal').classList.add('active');
+            
+            // Resetear selección
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.classList.remove('selected');
+            });
+            document.getElementById('otherPaymentMethod').classList.remove('active');
+        }
+        
+        // Cerrar modal de pago
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            currentServiceId = null;
+            selectedPaymentMethod = null;
+        }
+        
+        // Seleccionar método de pago
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Actualizar UI
+            document.querySelectorAll('.payment-method').forEach(m => {
+                m.classList.remove('selected');
+            });
+            document.querySelector(`[data-method="${method}"]`).classList.add('selected');
+            
+            // Mostrar/ocultar campo para otro método
+            if (method === 'otro') {
+                document.getElementById('otherPaymentMethod').classList.add('active');
+            } else {
+                document.getElementById('otherPaymentMethod').classList.remove('active');
+            }
+        }
+        
+        // Confirmar pago
+        async function confirmPayment() {
+            if (!selectedPaymentMethod) {
+                showNotification('Por favor selecciona un método de pago', 'warning');
+                return;
+            }
+            
+            if (selectedPaymentMethod === 'otro') {
+                const otherPaymentDetails = document.getElementById('otherPaymentDetails').value.trim();
+                if (!otherPaymentDetails) {
+                    showNotification('Por favor especifica el método de pago', 'warning');
+                    return;
+                }
+            }
+            
+            try {
+                const paymentData = {
+                    metodoPago: selectedPaymentMethod,
+                    detallesPago: selectedPaymentMethod === 'otro' 
+                        ? document.getElementById('otherPaymentDetails').value 
+                        : null
+                };
+                
+                const response = await fetch(`/api/services/${currentServiceId}/confirm`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(paymentData),
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    showNotification('Solicitud confirmada correctamente', 'success');
+                    closePaymentModal();
+                    loadServices();
+                } else {
+                    const error = await response.json();
+                    showNotification(error.mensaje || 'Error al confirmar la solicitud', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error al confirmar la solicitud', 'error');
+            }
+        }
+        
+        // Mostrar notificación
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Cargar datos iniciales
+        window.onload = function() {
+            loadServices();
+        };
+    </script>
+</body>
+</html>

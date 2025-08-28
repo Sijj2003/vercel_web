@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Portal Místico</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8a2be2;
+            --secondary-color: #4b0082;
+            --accent-color: #9d4edd;
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --bg-dark: #0a0a0a;
+            --bg-medium: #1a1a2e;
+            --bg-light: #16213e;
+            --card-bg: rgba(26, 26, 46, 0.8);
+            --border-color: rgba(138, 43, 226, 0.3);
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 50%, var(--bg-light) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .profile-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .profile-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.8));
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, var(--bg-medium), var(--bg-light));
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .profile-main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .profile-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .profile-title h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Profile Progress */
+        .profile-progress {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .progress-percentage {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        /* Profile Form */
+        .profile-form-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .profile-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .profile-section:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Profile Picture */
+        .profile-picture-section {
+            grid-column: span 2;
+            text-align: center;
+        }
+
+        .profile-picture-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+            border: 4px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        /* Form Actions */
+        .form-actions {
+            grid-column: span 2;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-save {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-save:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.6);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(45deg, var(--bg-medium), var(--bg-light));
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-cancel:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-color);
+        }
+
+        /* Info Cards */
+        .info-cards {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .info-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .info-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-header {
+                padding: 1rem;
+            }
+
+            .profile-main {
+                padding: 1rem;
+            }
+
+            .profile-form-container {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-picture-section,
+            .form-actions,
+            .info-cards {
+                grid-column: span 1;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-title h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .profile-section:nth-child(1) { animation-delay: 0.1s; }
+        .profile-section:nth-child(2) { animation-delay: 0.2s; }
+        .profile-section:nth-child(3) { animation-delay: 0.3s; }
+        .profile-section:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="profile-wrapper">
+        <!-- Header -->
+        <header class="profile-header">
+            <div class="logo-section">
+                <div class="logo">🔮</div>
+                <div class="logo-text">Portal Místico</div>
+            </div>
+            <div class="header-actions">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver al Dashboard
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="profile-main">
+            <div class="profile-title">
+                <h1>Mi Perfil Místico</h1>
+                <p>Completa tu información para recibir consultas personalizadas y un mejor servicio</p>
+            </div>
+
+            <!-- Profile Progress -->
+            <div class="profile-progress">
+                <div class="progress-header">
+                    <div class="progress-title">
+                        <i class="fas fa-chart-line"></i> Completitud del Perfil
+                    </div>
+                    <div class="progress-percentage" id="profilePercentage">0%</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Privacidad Garantizada</h3>
+                    <p>Tu información está protegida y solo se usa para mejorar tu experiencia</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Servicio Global</h3>
+                    <p>Conectamos contigo sin importar dónde te encuentres</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Consultas Personalizadas</h3>
+                    <p>Adaptamos nuestros servicios a tus necesidades específicas</p>
+                </div>
+            </div>
+
+            <!-- Profile Form -->
+            <form id="profileForm" class="profile-form-container">
+                <!-- Profile Picture Section -->
+                <div class="profile-picture-section profile-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="section-title">Foto de Perfil</div>
+                    </div>
+                    <div class="profile-picture-container">
+                        <div class="profile-picture" id="profilePicture">U</div>
+                    </div>
+                    <button type="button" class="upload-btn">
+                        <i class="fas fa-camera"></i>
+                        Cambiar Foto
+                    </button>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="section-title">Información Personal</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreCompleto">Nombre Completo *</label>
+                        <input type="text" id="nombreCompleto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaNacimiento">Fecha de Nacimiento *</label>
+                        <input type="date" id="fechaNacimiento" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signoZodiacal">Signo Zodiacal *</label>
+                        <select id="signoZodiacal" required>
+                            <option value="">Selecciona tu signo</option>
+                            <option value="Aries">Aries (21 marzo - 19 abril)</option>
+                            <option value="Tauro">Tauro (20 abril - 20 mayo)</option>
+                            <option value="Géminis">Géminis (21 mayo - 20 junio)</option>
+                            <option value="Cáncer">Cáncer (21 junio - 22 julio)</option>
+                            <option value="Leo">Leo (23 julio - 22 agosto)</option>
+                            <option value="Virgo">Virgo (23 agosto - 22 septiembre)</option>
+                            <option value="Libra">Libra (23 septiembre - 22 octubre)</option>
+                            <option value="Escorpio">Escorpio (23 octubre - 21 noviembre)</option>
+                            <option value="Sagitario">Sagitario (22 noviembre - 21 diciembre)</option>
+                            <option value="Capricornio">Capricornio (22 diciembre - 19 enero)</option>
+                            <option value="Acuario">Acuario (20 enero - 18 febrero)</option>
+                            <option value="Piscis">Piscis (19 febrero - 20 marzo)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="biografia">Biografía Espiritual</label>
+                        <textarea id="biografia" placeholder="Cuéntanos sobre tu camino espiritual, tus experiencias y lo que buscas en el Portal Místico..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-address-book"></i>
+                        </div>
+                        <div class="section-title">Información de Contacto</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Número de Teléfono *</label>
+                        <input type="tel" id="telefono" placeholder="+34 600 000 000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telegram">Usuario de Telegram</label>
+                        <input type="text" id="telegram" placeholder="@usuario (opcional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="whatsapp">WhatsApp (si es diferente al teléfono)</label>
+                        <input type="tel" id="whatsapp" placeholder="+34 600 000 000">
+                    </div>
+                </div>
+
+                <!-- Location Information Section -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="section-title">Información de Ubicación</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paisNacimiento">País de Nacimiento *</label>
+                            <select id="paisNacimiento" required>
+                                <option value="">Selecciona un país</option>
+                                <option value="España">España</option>
+                                <option value="México">México</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Perú">Perú</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Venezuela">Venezuela</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Estados Unidos">Estados Unidos</option>
+                                <option value="Canadá">Canadá</option>
+                                <option value="Reino Unido">Reino Unido</option>
+                                <option value="Francia">Francia</option>
+                                <option value="Alemania">Alemania</option>
+                                <option value="Italia">Italia</option>
+                                <option value="Portugal">Portugal</option>
+                                <option value="Brasil">Brasil</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paisResidencia">País de Residencia *</label>
+                            <select id="paisResidencia" required>
+                                <option value="">Selecciona un país</option>
+                                <option value="España">España</option>
+                                <option value="México">México</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Perú">Perú</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Venezuela">Venezuela</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Estados Unidos">Estados Unidos</option>
+                                <option value="Canadá">Canadá</option>
+                                <option value="Reino Unido">Reino Unido</option>
+                                <option value="Francia">Francia</option>
+                                <option value="Alemania">Alemania</option>
+                                <option value="Italia">Italia</option>
+                                <option value="Portugal">Portugal</option>
+                                <option value="Brasil">Brasil</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad de Residencia</label>
+                        <input type="text" id="ciudad" placeholder="Ciudad donde vives actualmente">
+                    </div>
+                    <div class="form-group">
+                        <label for="zonaHoraria">Zona Horaria</label>
+                        <select id="zonaHoraria">
+                            <option value="">Selecciona tu zona horaria</option>
+                            <option value="GMT-12">GMT-12:00 (Baker Island, Howland Island)</option>
+                            <option value="GMT-11">GMT-11:00 (American Samoa, Niue)</option>
+                            <option value="GMT-10">GMT-10:00 (Hawaii, Cook Islands)</option>
+                            <option value="GMT-9">GMT-09:00 (Alaska, Gambier Islands)</option>
+                            <option value="GMT-8">GMT-08:00 (Pacific Time, Tijuana)</option>
+                            <option value="GMT-7">GMT-07:00 (Mountain Time, Arizona)</option>
+                            <option value="GMT-6">GMT-06:00 (Central Time, Mexico City)</option>
+                            <option value="GMT-5">GMT-05:00 (Eastern Time, Bogotá, Lima)</option>
+                            <option value="GMT-4">GMT-04:00 (Atlantic Time, Caracas, La Paz)</option>
+                            <option value="GMT-3">GMT-03:00 (Buenos Aires, São Paulo, Santiago)</option>
+                            <option value="GMT-2">GMT-02:00 (Fernando de Noronha, South Georgia)</option>
+                            <option value="GMT-1">GMT-01:00 (Azores, Cape Verde)</option>
+                            <option value="GMT+0">GMT+00:00 (London, Dublin, Lisbon)</option>
+                            <option value="GMT+1">GMT+01:00 (Central European Time, West Africa)</option>
+                            <option value="GMT+2">GMT+02:00 (Eastern European Time, Cairo)</option>
+                            <option value="GMT+3">GMT+03:00 (Moscow, Istanbul, Nairobi)</option>
+                            <option value="GMT+4">GMT+04:00 (Dubai, Baku, Tbilisi)</option>
+                            <option value="GMT+5">GMT+05:00 (Karachi, Tashkent, Maldives)</option>
+                            <option value="GMT+6">GMT+06:00 (Dhaka, Almaty, Omsk)</option>
+                            <option value="GMT+7">GMT+07:00 (Bangkok, Jakarta, Hanoi)</option>
+                            <option value="GMT+8">GMT+08:00 (Beijing, Hong Kong, Singapore)</option>
+                            <option value="GMT+9">GMT+09:00 (Tokyo, Seoul, Pyongyang)</option>
+                            <option value="GMT+10">GMT+10:00 (Sydney, Melbourne, Guam)</option>
+                            <option value="GMT+11">GMT+11:00 (Solomon Islands, New Caledonia)</option>
+                            <option value="GMT+12">GMT+12:00 (New Zealand, Fiji, Marshall Islands)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="goBack()">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i>
+                        Guardar Perfil
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        // Cargar perfil existente
+        window.onload = async function() {
+            try {
+                const response = await fetch('/api/user');
+                
+                if (response.ok) {
+                    const user = await response.json();
+                    
+                    // Actualizar foto de perfil
+                    if (user.perfil && user.perfil.nombreCompleto) {
+                        const profilePicture = document.getElementById('profilePicture');
+                        profilePicture.textContent = user.perfil.nombreCompleto.charAt(0).toUpperCase();
+                    }
+                    
+                    // Rellenar formulario con datos existentes
+                    if (user.perfil) {
+                        document.getElementById('nombreCompleto').value = user.perfil.nombreCompleto || '';
+                        document.getElementById('fechaNacimiento').value = user.perfil.fechaNacimiento ? new Date(user.perfil.fechaNacimiento).toISOString().split('T')[0] : '';
+                        document.getElementById('signoZodiacal').value = user.perfil.signoZodiacal || '';
+                        document.getElementById('biografia').value = user.perfil.biografia || '';
+                        document.getElementById('telefono').value = user.perfil.telefono || '';
+                        document.getElementById('telegram').value = user.perfil.telegram || '';
+                        document.getElementById('whatsapp').value = user.perfil.whatsapp || '';
+                        document.getElementById('paisNacimiento').value = user.perfil.paisNacimiento || '';
+                        document.getElementById('paisResidencia').value = user.perfil.paisResidencia || '';
+                        document.getElementById('ciudad').value = user.perfil.ciudad || '';
+                        document.getElementById('zonaHoraria').value = user.perfil.zonaHoraria || '';
+                    }
+                    
+                    // Calcular y mostrar porcentaje de perfil completado
+                    updateProfileProgress(user.perfil);
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = '/';
+            }
+        };
+
+        // Actualizar barra de progreso del perfil
+        function updateProfileProgress(perfil) {
+            const requiredFields = [
+                'nombreCompleto',
+                'fechaNacimiento',
+                'signoZodiacal',
+                'telefono',
+                'paisNacimiento',
+                'paisResidencia'
+            ];
+            
+            const optionalFields = [
+                'biografia',
+                'telegram',
+                'whatsapp',
+                'ciudad',
+                'zonaHoraria'
+            ];
+            
+            let completedFields = 0;
+            let totalFields = requiredFields.length + (optionalFields.length * 0.5);
+            
+            // Contar campos requeridos completados
+            requiredFields.forEach(field => {
+                if (perfil && perfil[field]) completedFields++;
+            });
+            
+            // Contar campos opcionales completados (mitad de peso)
+            optionalFields.forEach(field => {
+                if (perfil && perfil[field]) completedFields += 0.5;
+            });
+            
+            const percentage = Math.round((completedFields / totalFields) * 100);
+            
+            document.getElementById('profilePercentage').textContent = percentage + '%';
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        // Guardar perfil
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const perfilData = {
+                nombreCompleto: document.getElementById('nombreCompleto').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                signoZodiacal: document.getElementById('signoZodiacal').value,
+                biografia: document.getElementById('biografia').value,
+                telefono: document.getElementById('telefono').value,
+                telegram: document.getElementById('telegram').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                paisNacimiento: document.getElementById('paisNacimiento').value,
+                paisResidencia: document.getElementById('paisResidencia').value,
+                ciudad: document.getElementById('ciudad').value,
+                zonaHoraria: document.getElementById('zonaHoraria').value
+            };
+            
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(perfilData)
+                });
+                
+                if (response.ok) {
+                    alert('¡Perfil actualizado correctamente! Tu información nos ayudará a brindarte un mejor servicio.');
+                    window.location.href = '/dashboard';
+                } else {
+                    const error = await response.json();
+                    alert(error.mensaje || 'Error al actualizar perfil');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al actualizar perfil');
+            }
+        });
+
+        function goBack() {
+            window.location.href = '/dashboard';
+        }
+    </script>
+</body>
+</html>
