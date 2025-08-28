@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('regPassword').value;
         
         try {
+            // **CORRECCIÓN AQUÍ: USAR RUTA RELATIVA**
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
         
         try {
+            // **CORRECCIÓN AQUÍ: USAR RUTA RELATIVA**
             const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: {
